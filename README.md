@@ -1,112 +1,30 @@
-# Symfony Docker
+# GIT
 
-A [Docker](https://www.docker.com/)-based installer and runtime for the [Symfony](https://symfony.com) web framework, with full [HTTP/2](https://symfony.com/doc/current/weblink.html) and HTTPS support.
+## Getting started
+1. git clone [**adresse du repo**][1]
+2. git checkout [front] ou [back] (pour se déplacer sur la branche à partir de laquelle travailler)
+3. git checkout -b [my-branch-name] (crée la branche et se déplace dessus)
 
+## Travailler sur sa branche
+1. pour ajouter au suivi de fichier => git add [nom du fichier] ou git add -e pour valider chaque fichier
+2. pour commit => git commit -m "message de commit" (F - header[my-branch-name] - Menu création)
+3. pour push => git push 
 
-## Install
+## Rapatrier sur la branche principale
+1. git rebase => replanter la branche avec la dernière position du tronc dont elle est issue
+1. faire une pull request sur github ; nom de la branche dans le message
+2. attendre la réponse
+3. se déplacer sur le tronc et git merge [my-branch-name]
 
-1. For install the project, we use Symfony 4.4.
-Use this command `SYMFONY_VERSION=4.4.* docker-compose up --build` for initialise containers 
-
-## Getting Started
-
-1. Run `docker-compose up -d`(the logs will be displayed in the current shell)
-2. Open `https://localhost/` in your favorite web browser and [accept the auto-generated TLS certificate](https://stackoverflow.com/a/15076602/1352334)
-3. **Enjoy!**
-
-
-## Debugging
-
-The default Docker stack is shipped without a Xdebug stage.
-It's easy though to add [Xdebug](https://xdebug.org/) to your project, for development purposes such as debugging tests or API requests remotely.
-
-### Add a Development Stage to the Dockerfile
-
-To avoid deploying Symfony Docker to production with an active Xdebug extension,
-it's recommended to add a custom stage to the end of the `Dockerfile`.
-
-```Dockerfile
-# Dockerfile
-FROM symfony_php as symfony_php_dev
-
-ARG XDEBUG_VERSION=2.8.0
-RUN set -eux; \
-	apk add --no-cache --virtual .build-deps $PHPIZE_DEPS; \
-	pecl install xdebug-$XDEBUG_VERSION; \
-	docker-php-ext-enable xdebug; \
-	apk del .build-deps
-```
-
-### Configure Xdebug with Docker Compose Override
-
-Using an [override](https://docs.docker.com/compose/reference/overview/#specifying-multiple-compose-files) file named `docker-compose.override.yaml` ensures that the production
-configuration remains untouched.
-
-As example, an override could look like this:
-
-```yaml
-version: "3.4"
-
-services:
-  php:
-    build:
-      context: .
-      target: symfony_php_dev
-    environment:
-      # See https://docs.docker.com/docker-for-mac/networking/#i-want-to-connect-from-a-container-to-a-service-on-the-host
-      # See https://github.com/docker/for-linux/issues/264
-      # The `remote_host` below may optionally be replaced with `remote_connect_back`
-      XDEBUG_CONFIG: >-
-        remote_enable=1
-        remote_host=host.docker.internal
-        remote_port=9001
-        idekey=PHPSTORM
-      # This should correspond to the server declared in PHPStorm `Preferences | Languages & Frameworks | PHP | Servers`
-      # Then PHPStorm will use the corresponding path mappings
-      PHP_IDE_CONFIG: serverName=symfony
-```
-
-Then run:
-
-```bash
-docker-compose up -d
-```
-
-If `docker-compose.yml` and a `docker-compose.override.yml` are present on the same directory level, Docker Compose combines the two files into a single configuration, applying the configuration in the `docker-compose.override.yml` file over and in addition to the values in the `docker-compose.yml` file.
-
-### Troubleshooting
-
-Inspect the installation with the following command. The requested Xdebug version should be displayed in the output.
-
-```bash
-$ docker-compose exec php php --version
-
-PHP ...
-    with Xdebug v2.8.0 ...
-```
-
-### Ports issues
-
-If the ports are already used, run : 
-
-Mysql 
-``` 
-service mysql stop
-```
-
-Apache
-``` 
-service apache2 stop
-```
+Faut juste vous dire que vous allez jamais faire des merges tout seul, dixit Valentin le sénateur
 
 
 
-### Editing Permissions on Linux
-
-If you work on linux and cannot edit some of the project files right after the first installation, you can run `docker-compose run --rm php chown -R $(id -u):$(id -g) .` to set yourself as owner of the project files that were created by the docker container.
-
-## Credits
-
-Created by [Kévin Dunglas](https://dunglas.fr), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
 
 
+
+
+
+
+
+[1]: github.com
