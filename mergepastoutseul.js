@@ -1,0 +1,1 @@
+const mergepas = "le fou il a merge tout seul!";
